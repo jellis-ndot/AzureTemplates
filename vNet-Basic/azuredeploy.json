@@ -1,0 +1,105 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "virtualNetworks_name": {
+      "defaultValue": "Dev-vNet1-WestUS",
+      "type": "String",
+      "metadata": {
+        "description": "<subscription-vNet#-location i.e. 'Dev-vNet1-WestUS'"
+      }
+    },
+    "virtualNetworks_location": {
+      "defaultValue": "West US",
+      "allowedValues": [ "West US", "East US" ],
+      "type": "String",
+      "metadata": {
+        "description": "vNet Location i.e. 'West US'"
+      }
+    },
+    "virtualNetworks_address_space": {
+      "defaultValue": "10.156.225.0/24",
+      "type": "String",
+      "metadata": {
+        "description": "vNet Address Space i.e. '10.156.225.0/24'"
+      }
+    },
+    "virtualNetworks_tags_Division": {
+      "defaultValue": "067",
+      "minLength": 3,
+      "maxLength": 3,
+      "type": "String",
+      "metadata": {
+        "description": "Division Number i.e. 067"
+      }
+    },
+    "virtualNetworks_tags_Environment": {
+      "defaultValue": "Prod",
+      "allowedValues": [ "Core", "Dev", "Prod", "QC", "Test" ],
+      "type": "String",
+      "metadata": {
+        "description": "Environment i.e 'Prod'"
+      }
+    },
+    "virtualNetworks_tags_Section": {
+      "defaultValue": "Network",
+      "allowedValues": [ "Desktop", "Development", "Network", "Systems" ],
+      "type": "String",
+      "metadata": {
+        "description": "Section i.e 'Network'"
+      }
+    }
+  },
+  "variables": {},
+  "resources": [
+    {
+      "type": "Microsoft.Network/virtualNetworks",
+      "apiVersion": "2019-06-01",
+      "name": "[parameters('virtualNetworks_name')]",
+      "location": "[parameters('virtualNetworks_location')]",
+      "tags": {
+        "Division": "[parameters('virtualNetworks_tags_Division')]",
+        "Environment": "[parameters('virtualNetworks_tags_Environment')]",
+        "Section": "[parameters('virtualNetworks_tags_Section')]"
+      },
+      "properties": {
+        "provisioningState": "Succeeded",
+        "resourceGuid": "49238b72-eef8-4b2e-be64-400fe2e3c867",
+        "addressSpace": {
+          "addressPrefixes": [
+            "[parameters('virtualNetworks_address_space')]"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "default",
+            "etag": "W/\"6ef3382b-cf57-4653-9fa4-89092e278b08\"",
+            "properties": {
+              "provisioningState": "Succeeded",
+              "addressPrefix": "[parameters('virtualNetworks_address_space')]",
+              "privateEndpointNetworkPolicies": "Enabled",
+              "privateLinkServiceNetworkPolicies": "Enabled"
+            }
+          }
+        ],
+        
+        "enableDdosProtection": false,
+        "enableVmProtection": false
+      }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworks/subnets",
+      "apiVersion": "2019-06-01",
+      "name": "[concat(parameters('virtualNetworks_name'), '/default')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_name'))]"
+      ],
+      "properties": {
+        "provisioningState": "Succeeded",
+        "addressPrefix": "[parameters('virtualNetworks_address_space')]",
+        "privateEndpointNetworkPolicies": "Enabled",
+        "privateLinkServiceNetworkPolicies": "Enabled"
+      }
+    }
+  ]
+}
