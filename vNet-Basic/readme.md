@@ -7,7 +7,7 @@
 </a>
 
 
-<a href="http://armviz.io/#/?load=https://raw.githubusercontent.com/jellis-ndot/AzureTemplates/blob/master/vNet-Basic/azuredeploy.json" target="_blank">
+<a href="http://armviz.io/#/?load=https://raw.githubusercontent.com/jellis-ndot/AzureTemplates/master/vNet-Basic/azuredeploy.json" target="_blank">
   <img src="http://armviz.io/visualizebutton.png"/>
 </a>
 
